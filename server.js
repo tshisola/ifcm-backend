@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
@@ -9,10 +10,13 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/auth",require("./routes/authRoutes"));
+// ✅ ROUTE ACCUEIL
+app.get("/", (req, res) => {
+  res.send("IFCM Backend API fonctionne 🚀");
+});
 
-app.listen(5000,()=>{
+app.use("/api/auth", require("./routes/authRoutes"));
 
- console.log("Serveur lancé sur port 5000");
-
+app.listen(5000, () => {
+  console.log("Serveur lancé sur port 5000");
 });
