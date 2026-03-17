@@ -15,6 +15,7 @@ app.get("/", (req, res) => {
   res.send("IFCM Backend API fonctionne 🚀");
 });
 
+// 🔐 AUTH ROUTES
 app.use("/api/auth", require("./routes/authRoutes"));
 
 app.listen(5000, () => {
