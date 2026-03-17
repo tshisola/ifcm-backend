@@ -2,10 +2,16 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
-    await mongoose.connect("mongodb://localhost:27017/ifcm");
+
+    console.log("Connexion MongoDB...");
+
+    await mongoose.connect(process.env.MONGO_URI);
+
     console.log("MongoDB connecté");
+
   } catch (error) {
-    console.error(error);
+
+    console.error("Erreur MongoDB :", error.message);
   }
 };
 
