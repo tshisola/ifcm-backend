@@ -9,6 +9,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// 🔥 SERVIR LES FICHIERS UPLOAD
+app.use("/uploads", express.static("uploads"));
+
 // ✅ ROUTE TEST
 app.get("/", (req, res) => {
   res.send("IFCM Backend API fonctionne 🚀");
@@ -17,7 +20,7 @@ app.get("/", (req, res) => {
 // ✅ ROUTES AUTH
 app.use("/api/auth", require("./routes/authRoutes"));
 
-// 🔥 ROUTES POSTS (AJOUTÉ)
+// ✅ ROUTES POSTS
 app.use("/api/posts", require("./routes/postRoutes"));
 
 // ✅ DÉMARRAGE SERVEUR APRÈS DB

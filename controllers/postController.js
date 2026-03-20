@@ -1,9 +1,20 @@
 const Post = require("../models/Post");
 
-// ✅ CRÉER POST
+// ✅ CRÉER POST AVEC IMAGE / VIDÉO
 exports.createPost = async (req, res) => {
   try {
-    const { userId, text, image, video } = req.body;
+    const { userId, text } = req.body;
+
+    let image = "";
+    let video = "";
+
+    if (req.file) {
+      if (req.file.mimetype.startsWith("image")) {
+        image = `/uploads/${req.file.filename}`;
+      } else if (req.file.mimetype.startsWith("video")) {
+        video = `/uploads/${req.file.filename}`;
+      }
+    }
 
     const post = new Post({
       user: userId,
@@ -15,7 +26,7 @@ exports.createPost = async (req, res) => {
     await post.save();
 
     res.json({
-      message: "Post créé",
+      message: "Post avec média créé",
       post
     });
 
@@ -38,7 +49,7 @@ exports.getPosts = async (req, res) => {
   }
 };
 
-// ❤️ LIKE
+// ❤️ LIKE POST
 exports.likePost = async (req, res) => {
   try {
     const { postId, userId } = req.body;
@@ -61,7 +72,7 @@ exports.likePost = async (req, res) => {
   }
 };
 
-// 💬 COMMENTAIRE
+// 💬 COMMENTAIRE POST
 exports.commentPost = async (req, res) => {
   try {
     const { postId, userId, text } = req.body;

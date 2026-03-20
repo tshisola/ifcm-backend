@@ -1,9 +1,33 @@
-### TEST REGISTER
-POST http://ifcm-backend-1.onrender.com/api/auth/register
+POST http://ifcm-backend-1.onrender.com/api/posts/create
 Content-Type: application/json
 
 {
-  "name": "Verdick",
-  "email": "verdick5@gmail.com",
-  "password": "123456"
+  "userId": "69bcf4f28f96b40629764c38",
+  "text": "Mon premier post IFCM 🔥",
+  "image": "",
+  "video": ""
 }
+
+### TEST GET POSTS
+GET http://ifcm-backend-1.onrender.com/api/posts
+
+### TEST LIKE
+POST http://ifcm-backend-1.onrender.com/api/posts/like
+Content-Type: application/json
+
+{
+  "postId": "69bcfa401d3f332b727d851f",
+  "userId": "69bcf4f28f96b40629764c38"
+}
+
+### TEST COMMENT
+POST http://ifcm-backend-1.onrender.com/api/posts/comment
+Content-Type: application/json
+
+{
+  "postId": "69bcfa401d3f332b727d851f",
+  "userId": "69bcf4f28f96b40629764c38",
+  "text": "Amen 🔥🙏"
+}
+
+GET http://ifcm-backend-1.onrender.com/api/posts
