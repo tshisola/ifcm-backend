@@ -13,13 +13,16 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: "Champs manquants" });
     }
 
+    // vérifier si utilisateur existe
     const exist = await User.findOne({ email });
     if (exist) {
       return res.status(400).json({ message: "Email déjà utilisé" });
     }
 
+    // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // ID IFCM
     const ifcmId = "IFCM-" + Date.now();
 
     const user = new User({
@@ -31,9 +34,12 @@ exports.register = async (req, res) => {
 
     await user.save();
 
+    // 🔥 SUPPRIMER PASSWORD DANS LA RÉPONSE
+    const { password: _, ...userData } = user._doc;
+
     res.json({
       message: "Utilisateur créé",
-      user
+      user: userData
     });
 
   } catch (error) {
@@ -71,10 +77,13 @@ exports.login = async (req, res) => {
       { expiresIn: "7d" }
     );
 
+    // 🔥 SUPPRIMER PASSWORD DANS LOGIN AUSSI
+    const { password: _, ...userData } = user._doc;
+
     res.json({
       message: "Connexion réussie",
       token,
-      user
+      user: userData
     });
 
   } catch (error) {
