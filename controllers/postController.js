@@ -5,6 +5,9 @@ exports.createPost = async (req, res) => {
   try {
     const { userId, text } = req.body;
 
+    // 🔥 DEBUG MULTER
+    console.log("FILE DEBUG:", req.file);
+
     let image = "";
     let video = "";
 
