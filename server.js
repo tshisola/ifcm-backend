@@ -5,19 +5,29 @@ const connectDB = require("./config/db");
 
 const app = express();
 
-connectDB();
-
 app.use(cors());
 app.use(express.json());
 
-// ✅ ROUTE ACCUEIL
+// ROUTE TEST
 app.get("/", (req, res) => {
   res.send("IFCM Backend API fonctionne 🚀");
 });
 
-// 🔐 AUTH ROUTES
+// ROUTES
 app.use("/api/auth", require("./routes/authRoutes"));
 
-app.listen(5000, () => {
-  console.log("Serveur lancé sur port 5000");
-});
+// ⚡ ATTENDRE MONGODB AVANT LANCEMENT
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    app.listen(5000, () => {
+      console.log("Serveur lancé sur port 5000");
+    });
+
+  } catch (error) {
+    console.error("Erreur démarrage serveur :", error);
+  }
+};
+
+startServer();
