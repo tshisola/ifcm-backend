@@ -5,18 +5,22 @@ const connectDB = require("./config/db");
 
 const app = express();
 
+// ✅ Middleware
 app.use(cors());
 app.use(express.json());
 
-// ROUTE TEST
+// ✅ ROUTE TEST
 app.get("/", (req, res) => {
   res.send("IFCM Backend API fonctionne 🚀");
 });
 
-// ROUTES
+// ✅ ROUTES AUTH
 app.use("/api/auth", require("./routes/authRoutes"));
 
-// ⚡ ATTENDRE MONGODB AVANT LANCEMENT
+// 🔥 ROUTES POSTS (AJOUTÉ)
+app.use("/api/posts", require("./routes/postRoutes"));
+
+// ✅ DÉMARRAGE SERVEUR APRÈS DB
 const startServer = async () => {
   try {
     await connectDB();
