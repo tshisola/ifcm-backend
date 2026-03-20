@@ -1,0 +1,20 @@
+### TEST REGISTER
+POST http://ifcm-backend.onrender.com/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Verdick",
+  "email": "verdick2@gmail.com",
+  "password": "123456"
+}
+
+###
+
+### TEST LOGIN
+POST http://ifcm-backend.onrender.com/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "verdick@gmail.com",
+  "password": "123456"
+}

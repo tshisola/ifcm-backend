@@ -5,17 +5,21 @@ const jwt = require("jsonwebtoken");
 // 🔐 REGISTER
 exports.register = async (req, res) => {
   try {
+    console.log("BODY:", req.body);
 
     const { name, email, password } = req.body;
 
-    // vérifier si utilisateur existe
-    const exist = await User.findOne({ email });
-    if (exist) return res.status(400).json("Email déjà utilisé");
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "Champs manquants" });
+    }
 
-    // hash password
+    const exist = await User.findOne({ email });
+    if (exist) {
+      return res.status(400).json({ message: "Email déjà utilisé" });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // créer ID IFCM unique
     const ifcmId = "IFCM-" + Date.now();
 
     const user = new User({
@@ -33,36 +37,48 @@ exports.register = async (req, res) => {
     });
 
   } catch (error) {
-    res.status(500).json(error);
+    console.error("REGISTER ERROR:", error.message);
+    res.status(500).json({ error: error.message });
   }
 };
 
 // 🔐 LOGIN
 exports.login = async (req, res) => {
+  try {
+    console.log("LOGIN BODY:", req.body);
 
-  const { email, password } = req.body;
+    const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
+    if (!email || !password) {
+      return res.status(400).json({ message: "Champs manquants" });
+    }
 
-  if (!user) {
-    return res.status(400).json("Utilisateur non trouvé");
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ message: "Utilisateur non trouvé" });
+    }
+
+    const valid = await bcrypt.compare(password, user.password);
+
+    if (!valid) {
+      return res.status(400).json({ message: "Mot de passe incorrect" });
+    }
+
+    const token = jwt.sign(
+      { id: user._id },
+      "SECRET_KEY_IFCM",
+      { expiresIn: "7d" }
+    );
+
+    res.json({
+      message: "Connexion réussie",
+      token,
+      user
+    });
+
+  } catch (error) {
+    console.error("LOGIN ERROR:", error.message);
+    res.status(500).json({ error: error.message });
   }
-
-  const valid = await bcrypt.compare(password, user.password);
-
-  if (!valid) {
-    return res.status(400).json("Mot de passe incorrect");
-  }
-
-  const token = jwt.sign(
-    { id: user._id },
-    "SECRET_KEY_IFCM",
-    { expiresIn: "7d" }
-  );
-
-  res.json({
-    message: "Connexion réussie",
-    token,
-    user
-  });
 };
