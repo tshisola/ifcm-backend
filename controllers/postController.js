@@ -5,18 +5,15 @@ exports.createPost = async (req, res) => {
   try {
     const { userId, text } = req.body;
 
-    // 🔥 DEBUG MULTER
+    // 🔥 DEBUG
     console.log("FILE DEBUG:", req.file);
 
+    // ✅ SOLUTION SIMPLE (REMPLACEMENT FAIT ICI)
     let image = "";
     let video = "";
 
     if (req.file) {
-      if (req.file.mimetype.startsWith("image")) {
-        image = `/uploads/${req.file.filename}`;
-      } else if (req.file.mimetype.startsWith("video")) {
-        video = `/uploads/${req.file.filename}`;
-      }
+      image = `/uploads/${req.file.filename}`;
     }
 
     const post = new Post({
